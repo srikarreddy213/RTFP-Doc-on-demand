@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Appointment</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #FFEFEF, #FFD7D7);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 520px;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      color: #1E3A8A;
+      text-align: center;
+      margin-bottom: 12px;
+      font-size: 2em;
+      font-weight: 600;
+    }
+
+    #doctor-info {
+      color: #14B8A6;
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 1.2em;
+      font-weight: 500;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #1E3A8A;
+      font-weight: 500;
+      font-size: 1em;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #E5E7EB;
+      border-radius: 10px;
+      font-size: 1em;
+      background: #F9FAFB;
+      color: #1E3A8A;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    input:focus, select:focus {
+      border-color: #14B8A6;
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.2);
+      transform: scale(1.02);
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #2DD4BF, #14B8A6);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    button:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #14B8A6, #2DD4BF);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(20, 184, 166, 0.4);
+    }
+
+    .error {
+      color: #F87171;
+      font-size: 0.9em;
+      margin-top: 8px;
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 25px;
+        margin: 10px;
+      }
+
+      h2 {
+        font-size: 1.7em;
+      }
+
+      #doctor-info {
+        font-size: 1.1em;
+      }
+
+      button {
+        padding: 14px;
+        font-size: 1em;
+      }
+
+      input, select {
+        padding: 12px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Book Your Appointment</h2>
+    <p id="doctor-info"></p>
+    <form id="booking-form">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" required aria-required="true">
+        <div id="name-error" class="error">Please enter a valid name (letters only).</div>
+      </div>
+      <div class="form-group">
+        <label for="contact">Contact Number</label>
+        <input type="tel" id="contact" name="contact" required aria-required="true">
+        <div id="contact-error" class="error">Please enter a valid 10-digit contact number.</div>
+      </div>
+      <div class="form-group">
+        <label for="date">Appointment Date</label>
+        <input type="date" id="date" name="date" required aria-required="true">
+        <div id="date-error" class="error">Please select a valid date (today or later).</div>
+      </div>
+      <div class="form-group">
+        <label for="time">Appointment Time</label>
+        <select id="time" name="time" required aria-required="true">
+          <option value="" disabled selected>Select a time</option>
+          <option value="09:00 AM">09:00 AM</option>
+          <option value="10:00 AM">10:00 AM</option>
+          <option value="11:00 AM">11:00 AM</option>
+          <option value="02:00 PM">02:00 PM</option>
+          <option value="03:00 PM">03:00 PM</option>
+          <option value="04:00 PM">04:00 PM</option>
+        </select>
+        <div id="time-error" class="error">Please select a valid time.</div>
+      </div>
+      <button type="submit">Confirm Booking</button>
+    </form>
+  </div>
+
+  <script>
+    function sanitizeInput(input) {
+      const div = document.createElement('div');
+      div.textContent = input;
+      return div.innerHTML;
+    }
+
+    function getQueryParams() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const doctor = sanitizeInput(urlParams.get('doctor') || 'Unknown Doctor');
+      document.getElementById('doctor-info').textContent = `Booking with: ${doctor}`;
+    }
+
+    function validateForm(name, contact, date, time) {
+      const nameError = document.getElementById('name-error');
+      const contactError = document.getElementById('contact-error');
+      const dateError = document.getElementById('date-error');
+      const timeError = document.getElementById('time-error');
+      let isValid = true;
+
+      nameError.style.display = 'none';
+      contactError.style.display = 'none';
+      dateError.style.display = 'none';
+      timeError.style.display = 'none';
+
+      if (!/^[A-Za-z\s]+$/.test(name.trim())) {
+        nameError.style.display = 'block';
+        isValid = false;
+      }
+
+      if (!/^\d{10}$/.test(contact.trim())) {
+        contactError.style.display = 'block';
+        isValid = false;
+      }
+
+      const selectedDate = new Date(date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (!date || selectedDate < today) {
+        dateError.style.display = 'block';
+        isValid = false;
+      }
+
+      if (!time) {
+        timeError.style.display = 'block';
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    document.getElementById('booking-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const contact = document.getElementById('contact').value;
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
+
+      if (validateForm(name, contact, date, time)) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const doctor = urlParams.get('doctor') || 'Unknown Doctor';
+        const booking = { name, contact, date, time, doctor };
+
+        // Store booking in localStorage
+        let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+        bookings.push(booking);
+        localStorage.setItem('bookings', JSON.stringify(bookings));
+
+        // Store notification for doctor
+        let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+        notifications.push({ doctor, name, date, time });
+        localStorage.setItem('notifications', JSON.stringify(notifications));
+
+        // Redirect to afterpayment.html
+        const params = new URLSearchParams({
+          name: name,
+          contact: contact,
+          date: date,
+          time: time,
+          doctor: doctor,
+          specialty: urlParams.get('specialty') || 'General Medicine',
+          qualification: urlParams.get('qualification') || 'MBBS',
+          location: urlParams.get('location') || 'Hyderabad'
+        });
+        window.location.href = `afterpayment.html?${params.toString()}`;
+      }
+    });
+
+    window.onload = getQueryParams;
+  </script>
+</body>
+</html>

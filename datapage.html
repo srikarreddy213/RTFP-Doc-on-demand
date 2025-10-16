@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find a Doctor in Telangana</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background: linear-gradient(135deg, #f9f9f9, #e3f2fd);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+        select, input {
+            padding: 14px;
+            width: 300px;
+            border: 2px solid #007bff;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease-in-out;
+            background: #fff;
+            cursor: pointer;
+        }
+        select:focus, input:focus {
+            box-shadow: 0px 0px 12px rgba(0, 123, 255, 0.5);
+        }
+        button {
+            padding: 14px 22px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: all 0.3s ease-in-out;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .doctor-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .doctor-card {
+            width: 320px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .doctor-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        .book-btn {
+            background: #28a745;
+            color: white;
+            padding: 12px;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease-in-out;
+        }
+        .book-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="color: #007bff; font-size: 36px; font-weight: bold;">Find a Doctor & Medical Services in Telangana</h1>
+        <div class="search-container">
+            <select id="specialty-search">
+                <option value="">Select Specialty</option>
+                <option value="General Physician">General Physician</option>
+                <option value="Cardiologist">Cardiologist</option>
+                <option value="Physiotherapist">Physiotherapist</option>
+                <option value="Gynecologist">Gynecologist</option>
+                <option value="Radiologist">Radiologist</option>
+                <option value="Palliative Care">Palliative Care</option>
+            </select>
+            <select id="location-search">
+                    <option value="">Select Location</option>
+                    <option value="Hyderabad">Hyderabad</option>
+                    <option value="Warangal">Warangal</option>
+                    <option value="Nizamabad">Nizamabad</option>
+                    <option value="Karimnagar">Karimnagar</option>
+                    <option value="Khammam">Khammam</option>
+                    <option value="Adilabad">Adilabad</option>
+                    <option value="Mahabubnagar">Mahabubnagar</option>
+                    <option value="Sangareddy">Sangareddy</option>
+                    <option value="Nalgonda">Nalgonda</option>
+                    <option value="Ranga Reddy">Ranga Reddy</option>
+             </select>
+                
+            
+            <button onclick="filterDoctors()">🔍 Search</button>
+        </div>
+        <div class="doctor-list" id="doctor-list"></div>
+    </div>
+    <script>
+        const services = [
+{ name: "Dr. Arjun Reddy", specialty: "General Physician", qualification: "MBBS, MD", location: "Hyderabad" },
+  { name: "Dr. Kavitha Menon", specialty: "Gynecologist", qualification: "MBBS, MS (OBG)", location: "Hyderabad" },
+  { name: "Dr. Rajesh Gupta", specialty: "Cardiologist", qualification: "MBBS, DM - Cardiology", location: "Hyderabad" },
+  { name: "Dr. Sneha Rao", specialty: "Physiotherapist", qualification: "BPT, MPT", location: "Hyderabad" },
+  { name: "Dr. Faizan Khan", specialty: "Radiologist", qualification: "MBBS, MD - Radiology", location: "Hyderabad" },
+  { name: "Dr. Asha Thomas", specialty: "Palliative Care", qualification: "MBBS, Fellowship in Palliative Medicine", location: "Hyderabad" },
+
+  // Warangal
+  { name: "Dr. Sandeep Rathi", specialty: "Cardiologist", qualification: "MBBS, DM", location: "Warangal" },
+  { name: "Dr. Pranitha Iyer", specialty: "General Physician", qualification: "MBBS, MD", location: "Warangal" },
+  { name: "Dr. Vamshi Krishna", specialty: "Radiologist", qualification: "MBBS, MD", location: "Warangal" },
+  { name: "Dr. Anitha Devi", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Warangal" },
+  { name: "Dr. Naveen K", specialty: "Palliative Care", qualification: "MBBS, Fellowship", location: "Warangal" },
+  { name: "Dr. Tara Bhargavi", specialty: "Physiotherapist", qualification: "BPT", location: "Warangal" },
+
+  // Nizamabad
+  { name: "Dr. Latha Ramesh", specialty: "General Physician", qualification: "MBBS, MD", location: "Nizamabad" },
+  { name: "Dr. Uday Shekar", specialty: "Cardiologist", qualification: "MBBS, DM", location: "Nizamabad" },
+  { name: "Dr. Sindhura M", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Nizamabad" },
+  { name: "Dr. Mahesh Kumar", specialty: "Radiologist", qualification: "MBBS, MD", location: "Nizamabad" },
+  { name: "Dr. Triveni Rao", specialty: "Physiotherapist", qualification: "BPT, MPT", location: "Nizamabad" },
+
+  // Karimnagar
+  { name: "Dr. Rahul Das", specialty: "General Physician", qualification: "MBBS, MD", location: "Karimnagar" },
+  { name: "Dr. Deepika Nair", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Karimnagar" },
+  { name: "Dr. Sai Kishore", specialty: "Radiologist", qualification: "MBBS, MD", location: "Karimnagar" },
+  { name: "Dr. Lavanya K", specialty: "Physiotherapist", qualification: "BPT, MPT", location: "Karimnagar" },
+  { name: "Dr. Harsha Vardhan", specialty: "Cardiologist", qualification: "MBBS, DM", location: "Karimnagar" },
+
+  // Khammam
+  { name: "Dr. Ashok Reddy", specialty: "General Physician", qualification: "MBBS, MD", location: "Khammam" },
+  { name: "Dr. Megha Sharma", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Khammam" },
+  { name: "Dr. Karthik V", specialty: "Radiologist", qualification: "MBBS, MD", location: "Khammam" },
+  { name: "Dr. Haritha Rao", specialty: "Palliative Care", qualification: "MBBS, Fellowship", location: "Khammam" },
+  { name: "Dr. Shalini Iyer", specialty: "Physiotherapist", qualification: "BPT, MPT", location: "Khammam" },
+
+  // Adilabad
+  { name: "Dr. Shashank Rao", specialty: "Cardiologist", qualification: "MBBS, DM", location: "Adilabad" },
+  { name: "Dr. Kiran Jyothi", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Adilabad" },
+  { name: "Dr. Sameer Khan", specialty: "General Physician", qualification: "MBBS, MD", location: "Adilabad" },
+  { name: "Dr. Supriya Reddy", specialty: "Radiologist", qualification: "MBBS, MD", location: "Adilabad" },
+  { name: "Dr. Vikas Sharma", specialty: "Physiotherapist", qualification: "BPT", location: "Adilabad" },
+
+  // Mahabubnagar
+  { name: "Dr. Charan Teja", specialty: "General Physician", qualification: "MBBS, MD", location: "Mahabubnagar" },
+  { name: "Dr. Pooja Mehta", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Mahabubnagar" },
+  { name: "Dr. Arvind R", specialty: "Radiologist", qualification: "MBBS, MD", location: "Mahabubnagar" },
+  { name: "Dr. Yamini Rao", specialty: "Cardiologist", qualification: "MBBS, DM", location: "Mahabubnagar" },
+  { name: "Dr. Srinivas Rao", specialty: "Palliative Care", qualification: "MBBS", location: "Mahabubnagar" },
+
+  // Sangareddy
+  { name: "Dr. Neha Agarwal", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Sangareddy" },
+  { name: "Dr. Ramesh D", specialty: "General Physician", qualification: "MBBS, MD", location: "Sangareddy" },
+  { name: "Dr. Kiran Reddy", specialty: "Cardiologist", qualification: "MBBS, DM", location: "Sangareddy" },
+  { name: "Dr. Vinutha", specialty: "Radiologist", qualification: "MBBS, MD", location: "Sangareddy" },
+  { name: "Dr. Harika T", specialty: "Physiotherapist", qualification: "BPT", location: "Sangareddy" },
+
+  // Nalgonda
+  { name: "Dr. Manoj Kumar", specialty: "Cardiologist", qualification: "MBBS, DM", location: "Nalgonda" },
+  { name: "Dr. Swathi G", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Nalgonda" },
+  { name: "Dr. Chaitanya Rao", specialty: "General Physician", qualification: "MBBS, MD", location: "Nalgonda" },
+  { name: "Dr. Bhanu Reddy", specialty: "Radiologist", qualification: "MBBS, MD", location: "Nalgonda" },
+  { name: "Dr. Leela Thomas", specialty: "Palliative Care", qualification: "MBBS", location: "Nalgonda" },
+
+  // Ranga Reddy
+  { name: "Dr. Mahendra Rao", specialty: "Cardiologist", qualification: "MBBS, DM", location: "Ranga Reddy" },
+  { name: "Dr. Divya Shah", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Ranga Reddy" },
+  { name: "Dr. Rohit Menon", specialty: "General Physician", qualification: "MBBS, MD", location: "Ranga Reddy" },
+  { name: "Dr. Snehalatha", specialty: "Radiologist", qualification: "MBBS, MD", location: "Ranga Reddy" },
+  { name: "Dr. Kruthi K", specialty: "Physiotherapist", qualification: "BPT, MPT", location: "Ranga Reddy" },
+];
+        
+        function displayServices(serviceList) {
+            const list = document.getElementById("doctor-list");
+            list.innerHTML = "";
+            serviceList.forEach(service => {
+                list.innerHTML += `
+                    <div class="doctor-card">
+                        <h3>${service.name}</h3>
+                        <p><strong>Specialty:</strong> ${service.specialty}</p>
+                        <p><strong>Qualification:</strong> ${service.qualification}</p>
+                        <p><strong>Location:</strong> ${service.location}</p>
+                        <button class="book-btn" onclick="bookNow('${service.name}')">Book Now</button>
+                    </div>
+                `;
+            });
+        }
+
+        function bookNow(doctorName) {
+            window.location.href = `booknow.html?doctor=${encodeURIComponent(doctorName)}`;
+        }
+
+        function filterDoctors() {
+            const specialtySearch = document.getElementById("specialty-search").value.toLowerCase();
+            const locationSearch = document.getElementById("location-search").value.toLowerCase();
+            const filtered = services.filter(service =>
+                (specialtySearch === "" || service.specialty.toLowerCase() === specialtySearch) &&
+                (locationSearch === "" || service.location.toLowerCase() === locationSearch)
+            );
+            displayServices(filtered);
+        }
+
+        displayServices(services);
+    </script>
+</body>
+</html>

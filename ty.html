@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find a Doctor in Telangana</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e3f2fd, #f3e8ff);
+            min-height: 100vh;
+            color: #1F2937;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 30px;
+            gap: 30px;
+        }
+
+        .sidebar {
+            width: 340px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 20px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            background-image: linear-gradient(135deg, #ffffff, #ffffff), linear-gradient(135deg, #14B8A6, #F43F5E);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 3em;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(90deg, #14B8A6, #F43F5E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeIn 1.2s ease-out;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            padding: 10px 0;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .filter-toggle {
+            display: none;
+            background: linear-gradient(135deg, #14B8A6, #0D9488);
+            color: #FFFFFF;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 20px;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .filter-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(20, 184, 166, 0.3);
+        }
+
+        .search-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        select {
+            padding: 16px;
+            border: 2px solid #E5E7EB;
+            border-radius: 14px;
+            font-size: 1em;
+            background: #F9FAFB;
+            color: #1F2937;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+            width: 100%;
+        }
+
+        select:focus {
+            border-color: #14B8A6;
+            box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.2);
+            outline: none;
+            transform: scale(1.02);
+        }
+
+        select::placeholder {
+            color: #6B7280;
+        }
+
+        button {
+            padding: 16px;
+            background: linear-gradient(135deg, #F43F5E, #E11D48);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 14px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(244, 63, 94, 0.4);
+        }
+
+        button svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .doctor-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .doctor-card {
+            background: linear-gradient(135deg, #E6FFFA, #F0E7FF);
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, opacity 0.5s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .doctor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #14B8A6, #F43F5E);
+            border-radius: 24px 24px 0 0;
+        }
+
+        .doctor-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .doctor-card:hover {
+            transform: scale(1.06);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.15);
+        }
+
+        .doctor-card h3 {
+            font-size: 1.7em;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 14px;
+        }
+
+        .doctor-card p {
+            font-size: 1em;
+            color: #4B5563;
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .book-btn {
+            background: linear-gradient(135deg, #F43F5E, #E11D48);
+            width: 100%;
+            padding: 16px;
+            font-size: 1em;
+            font-weight: 600;
+            border-radius: 14px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .book-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(244, 63, 94, 0.4);
+        }
+
+        .no-results {
+            font-size: 1.3em;
+            color: #DC2626;
+            text-align: center;
+            padding: 30px;
+            background: #FEF2F2;
+            border-radius: 14px;
+            margin-top: 40px;
+            border: 1px solid #FEE2E2;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                box-shadow: none;
+                border: none;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(8px);
+                padding: 20px;
+            }
+
+            .filter-toggle {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .search-container {
+                display: none;
+            }
+
+            .search-container.active {
+                display: flex;
+                animation: slideDown 0.4s ease-out;
+            }
+
+            @keyframes slideDown {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.2em;
+            }
+
+            .doctor-card {
+                padding: 20px;
+            }
+
+            .book-btn {
+                padding: 14px;
+                font-size: 0.95em;
+            }
+
+            .sidebar {
+                padding: 15px;
+            }
+
+            select, button {
+                font-size: 0.95em;
+                padding: 14px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" role="main">
+        <div class="sidebar" role="complementary">
+            <button class="filter-toggle" aria-expanded="false" aria-controls="search-container">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M3 4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4zm1 0v1h8V4H4zm-1 4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8zm1 0v1h6V8H4zm-1 4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-1zm1 0v1h4v-1H4z"/>
+                </svg>
+                Filters
+            </button>
+            <div class="search-container" id="search-container">
+                <select id="specialty-search" aria-label="Select doctor specialty">
+                    <option value="">All Specialties</option>
+                    <option value="General Physician">General Physician</option>
+                    <option value="Cardiologist">Cardiologist</option>
+                    <option value="Physiotherapist">Physiotherapist</option>
+                    <option value="Gynecologist">Gynecologist</option>
+                    <option value="Radiologist">Radiologist</option>
+                    <option value="Palliative Care">Palliative Care</option>
+                </select>
+                <select id="location-search" aria-label="Select doctor location">
+                    <option value="">All Locations</option>
+                    <option value="Hyderabad">Hyderabad</option>
+                    <option value="Warangal">Warangal</option>
+                    <option value="Nizamabad">Nizamabad</option>
+                    <option value="Karimnagar">Karimnagar</option>
+                    <option value="Khammam">Khammam</option>
+                    <option value="Adilabad">Adilabad</option>
+                    <option value="Mahabubnagar">Mahabubnagar</option>
+                    <option value="Sangareddy">Sangareddy</option>
+                    <option value="Nalgonda">Nalgonda</option>
+                    <option value="Ranga Reddy">Ranga Reddy</option>
+                </select>
+                <button onclick="filterDoctors()" aria-label="Apply filters">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                    Apply
+                </button>
+            </div>
+        </div>
+        <div class="main-content">
+            <h1>Find a Doctor in Telangana</h1>
+            <div class="doctor-list" id="doctor-list" role="region" aria-live="polite"></div>
+        </div>
+    </div>
+
+    <script>
+        // Debounce function for performance
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Sanitize input (replace with DOMPurify in production)
+        function sanitizeInput(input) {
+            const div = document.createElement('div');
+            div.textContent = input;
+            return div.innerHTML;
+        }
+
+        // Load doctors from localStorage or use fallback
+        const doctors = JSON.parse(localStorage.getItem('doctors') || '[]').length > 0
+            ? JSON.parse(localStorage.getItem('doctors'))
+            : [
+            { name: "Dr. Arjun Reddy", specialty: "General Physician", qualification: "MBBS, MD", location: "Hyderabad" },
+            { name: "Dr. Kavitha Menon", specialty: "Gynecologist", qualification: "MBBS, MS (OBG)", location: "Hyderabad" },
+            { name: "Dr. Rajesh Gupta", specialty: "Cardiologist", qualification: "MBBS, DM - Cardiology", location: "Hyderabad" },
+            { name: "Dr. Sneha Rao", specialty: "Physiotherapist", qualification: "BPT, MPT", location: "Hyderabad" },
+            { name: "Dr. Faizan Khan", specialty: "Radiologist", qualification: "MBBS, MD - Radiology", location: "Hyderabad" },
+            { name: "Dr. Asha Thomas", specialty: "Palliative Care", qualification: "MBBS, Fellowship in Palliative Medicine", location: "Hyderabad" },
+            { name: "Dr. Sandeep Rathi", specialty: "Cardiologist", qualification: "MBBS, DM", location: "Warangal" },
+            { name: "Dr. Pranitha Iyer", specialty: "General Physician", qualification: "MBBS, MD", location: "Warangal" },
+            { name: "Dr. Vamshi Krishna", specialty: "Radiologist", qualification: "MBBS, MD", location: "Warangal" },
+            { name: "Dr. Anitha Devi", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Warangal" },
+            { name: "Dr. Naveen K", specialty: "Palliative Care", qualification: "MBBS, Fellowship", location: "Warangal" },
+            { name: "Dr. Tara Bhargavi", specialty: "Physiotherapist", qualification: "BPT", location: "Warangal" },
+            { name: "Dr. Latha Ramesh", specialty: "General Physician", qualification: "MBBS, MD", location: "Nizamabad" },
+            { name: "Dr. Uday Shekar", specialty: "Cardiologist", qualification: "MBBS, DM", location: "Nizamabad" },
+            { name: "Dr. Sindhura M", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Nizamabad" },
+            { name: "Dr. Mahesh Kumar", specialty: "Radiologist", qualification: "MBBS, MD", location: "Nizamabad" },
+            { name: "Dr. Triveni Rao", specialty: "Physiotherapist", qualification: "BPT, MPT", location: "Nizamabad" },
+            { name: "Dr. Rahul Das", specialty: "General Physician", qualification: "MBBS, MD", location: "Karimnagar" },
+            { name: "Dr. Deepika Nair", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Karimnagar" },
+            { name: "Dr. Sai Kishore", specialty: "Radiologist", qualification: "MBBS, MD", location: "Karimnagar" },
+            { name: "Dr. Lavanya K", specialty: "Physiotherapist", qualification: "BPT, MPT", location: "Karimnagar" },
+            { name: "Dr. Harsha Vardhan", specialty: "Cardiologist", qualification: "MBBS, DM", location: "Karimnagar" },
+            { name: "Dr. Ashok Reddy", specialty: "General Physician", qualification: "MBBS, MD", location: "Khammam" },
+            { name: "Dr. Megha Sharma", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Khammam" },
+            { name: "Dr. Karthik V", specialty: "Radiologist", qualification: "MBBS, MD", location: "Khammam" },
+            { name: "Dr. Haritha Rao", specialty: "Palliative Care", qualification: "MBBS, Fellowship", location: "Khammam" },
+            { name: "Dr. Shalini Iyer", specialty: "Physiotherapist", qualification: "BPT, MPT", location: "Khammam" },
+            { name: "Dr. Shashank Rao", specialty: "Cardiologist", qualification: "MBBS, DM", location: "Adilabad" },
+            { name: "Dr. Kiran Jyothi", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Adilabad" },
+            { name: "Dr. Sameer Khan", specialty: "General Physician", qualification: "MBBS, MD", location: "Adilabad" },
+            { name: "Dr. Supriya Reddy", specialty: "Radiologist", qualification: "MBBS, MD", location: "Adilabad" },
+            { name: "Dr. Vikas Sharma", specialty: "Physiotherapist", qualification: "BPT", location: "Adilabad" },
+            { name: "Dr. Charan Teja", specialty: "General Physician", qualification: "MBBS, MD", location: "Mahabubnagar" },
+            { name: "Dr. Pooja Mehta", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Mahabubnagar" },
+            { name: "Dr. Arvind R", specialty: "Radiologist", qualification: "MBBS, MD", location: "Mahabubnagar" },
+            { name: "Dr. Yamini Rao", specialty: "Cardiologist", qualification: "MBBS, DM", location: "Mahabubnagar" },
+            { name: "Dr. Srinivas Rao", specialty: "Palliative Care", qualification: "MBBS", location: "Mahabubnagar" },
+            { name: "Dr. Neha Agarwal", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Sangareddy" },
+            { name: "Dr. Ramesh D", specialty: "General Physician", qualification: "MBBS, MD", location: "Sangareddy" },
+            { name: "Dr. Kiran Reddy", specialty: "Cardiologist", qualification: "MBBS, DM", location: "Sangareddy" },
+            { name: "Dr. Vinutha", specialty: "Radiologist", qualification: "MBBS, MD", location: "Sangareddy" },
+            { name: "Dr. Harika T", specialty: "Physiotherapist", qualification: "BPT", location: "Sangareddy" },
+            { name: "Dr. Manoj Kumar", specialty: "Cardiologist", qualification: "MBBS, DM", location: "Nalgonda" },
+            { name: "Dr. Swathi G", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Nalgonda" },
+            { name: "Dr. Chaitanya Rao", specialty: "General Physician", qualification: "MBBS, MD", location: "Nalgonda" },
+            { name: "Dr. Bhanu Reddy", specialty: "Radiologist", qualification: "MBBS, MD", location: "Nalgonda" },
+            { name: "Dr. Leela Thomas", specialty: "Palliative Care", qualification: "MBBS", location: "Nalgonda" },
+            { name: "Dr. Mahendra Rao", specialty: "Cardiologist", qualification: "MBBS, DM", location: "Ranga Reddy" },
+            { name: "Dr. Divya Shah", specialty: "Gynecologist", qualification: "MBBS, MS", location: "Ranga Reddy" },
+            { name: "Dr. Rohit Menon", specialty: "General Physician", qualification: "MBBS, MD", location: "Ranga Reddy" },
+            { name: "Dr. Snehalatha", specialty: "Radiologist", qualification: "MBBS, MD", location: "Ranga Reddy" },
+            { name: "Dr. Kruthi K", specialty: "Physiotherapist", qualification: "BPT, MPT", location: "Ranga Reddy" },
+       ];
+
+        function displayServices(doctorList) {
+            const list = document.getElementById("doctor-list");
+            list.innerHTML = "";
+            if (doctorList.length === 0) {
+                list.innerHTML = '<div class="no-results">No doctors found for the selected criteria.</div>';
+                return;
+            }
+            doctorList.forEach(doctor => {
+                const card = document.createElement('div');
+                card.className = 'doctor-card';
+                card.innerHTML = `
+                    <h3>${sanitizeInput(doctor.name)}</h3>
+                    <p><strong>Specialty:</strong> ${sanitizeInput(doctor.specialty)}</p>
+                    <p><strong>Qualification:</strong> ${sanitizeInput(doctor.qualification)}</p>
+                    <p><strong>Location:</strong> ${sanitizeInput(doctor.location)}</p>
+                    <button class="book-btn" onclick="bookNow('${sanitizeInput(doctor.name)}', '${sanitizeInput(doctor.specialty)}', '${sanitizeInput(doctor.qualification)}', '${sanitizeInput(doctor.location)}')" aria-label="Book appointment with ${sanitizeInput(doctor.name)}">Book Now</button>
+                `;
+                list.appendChild(card);
+            });
+
+            // Lazy load cards with IntersectionObserver
+            const cards = document.querySelectorAll('.doctor-card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            cards.forEach(card => observer.observe(card));
+        }
+
+        function bookNow(doctorName, specialty, qualification, location) {
+            const loggedInPatient = JSON.parse(localStorage.getItem('loggedInPatient') || '{}');
+            if (!loggedInPatient.email) {
+                alert('⚠️ Please log in to book an appointment.');
+                window.location.href = 'login.html';
+                return;
+            }
+            const params = new URLSearchParams({
+                doctor: doctorName,
+                specialty,
+                qualification,
+                location,
+                patientEmail: loggedInPatient.email
+            });
+            window.location.href = `booknow.html?${params.toString()}`;
+        }
+
+        function filterDoctors() {
+            const specialtySearch = document.getElementById("specialty-search").value.toLowerCase();
+            const locationSearch = document.getElementById("location-search").value.toLowerCase();
+            const filtered = doctors.filter(doctor =>
+                (specialtySearch === "" || doctor.specialty.toLowerCase() === specialtySearch) &&
+                (locationSearch === "" || doctor.location.toLowerCase() === locationSearch)
+            );
+            displayServices(filtered);
+        }
+
+        // Debounced filter for real-time search
+        const debouncedFilter = debounce(filterDoctors, 300);
+
+        // Event listeners
+        document.getElementById("specialty-search").addEventListener("change", debouncedFilter);
+        document.getElementById("location-search").addEventListener("change", debouncedFilter);
+
+        // Toggle filters on mobile
+        const filterToggle = document.querySelector('.filter-toggle');
+        const searchContainer = document.getElementById('search-container');
+        filterToggle.addEventListener('click', () => {
+            const isActive = searchContainer.classList.toggle('active');
+            filterToggle.setAttribute('aria-expanded', isActive);
+        });
+
+        // Keyboard navigation
+        document.querySelectorAll('select, button').forEach(element => {
+            element.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && element.tagName === 'BUTTON') {
+                    element.click();
+                }
+            });
+        });
+
+        // Initial display
+        displayServices(doctors);
+
+        // Check patient login status
+        window.onload = () => {
+            const loggedInPatient = JSON.parse(localStorage.getItem('loggedInPatient') || '{}');
+            if (!loggedInPatient.email) {
+                setTimeout(() => {
+                    alert('ℹ️ Log in to book appointments with doctors.');
+                }, 1000);
+            }
+        };
+    </script>
+</body>
+</html>

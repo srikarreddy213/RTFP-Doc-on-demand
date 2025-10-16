@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Appointment</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 1.8em;
+      font-weight: 600;
+    }
+
+    #doctor-info {
+      color: #3498db;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.1em;
+      font-weight: 500;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #34495e;
+      font-weight: 500;
+      font-size: 1em;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1em;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    input:focus, select:focus {
+      border-color: #3498db;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #2980b9, #3498db);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .error {
+      color: #e74c3c;
+      font-size: 0.9em;
+      margin-top: 5px;
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+        margin: 15px;
+      }
+
+      h2 {
+        font-size: 1.5em;
+      }
+
+      button {
+        padding: 12px;
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 id="form-title">Book Your Appointment</h2>
+    <p id="doctor-info"></p>
+    <form id="booking-form">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" required aria-required="true">
+        <div id="name-error" class="error">Please enter a valid name (letters only).</div>
+      </div>
+      <div class="form-group">
+        <label for="contact">Contact Number</label>
+        <input type="tel" id="contact" name="contact" required aria-required="true">
+        <div id="contact-error" class="error">Please enter a valid 10-digit contact number.</div>
+      </div>
+      <div class="form-group">
+        <label for="date">Appointment Date</label>
+        <input type="date" id="date" name="date" required aria-required="true">
+        <div id="date-error" class="error">Please select a valid date (today or later).</div>
+      </div>
+      <div class="form-group">
+        <label for="time">Appointment Time</label>
+        <select id="time" name="time" required aria-required="true">
+          <option value="" disabled selected>Select a time</option>
+          <option value="8:00 AM">8:00 AM</option>
+          <option value="10:00 AM">10:00 AM</option>
+          <option value="12:00 PM">12:00 PM</option>
+          <option value="2:00 PM">2:00 PM</option>
+          <option value="4:00 PM">4:00 PM</option>
+          <option value="6:00 PM">6:00 PM</option>
+        </select>
+        <div id="time-error" class="error">Please select a valid time.</div>
+      </div>
+      <button type="submit" id="submit-button">Confirm Booking</button>
+    </form>
+  </div>
+
+  <script>
+    // Simple sanitization function (replace with DOMPurify in production)
+    function sanitizeInput(input) {
+      const div = document.createElement('div');
+      div.textContent = input;
+      return div.innerHTML;
+    }
+
+    // Get query parameters and display doctor info
+    function getQueryParams() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const doctor = sanitizeInput(urlParams.get('doctor') || 'Unknown Doctor');
+      document.getElementById('doctor-info').textContent = `Booking with: ${doctor}`;
+      const isReschedule = urlParams.get('reschedule') === 'true';
+      if (isReschedule) {
+        document.getElementById('form-title').textContent = 'Reschedule Your Appointment';
+        document.getElementById('submit-button').textContent = 'Confirm Reschedule';
+        const originalDate = urlParams.get('originalDate');
+        const originalTime = urlParams.get('originalTime');
+        const patientEmail = urlParams.get('patientEmail');
+        if (originalDate) document.getElementById('date').value = originalDate;
+        if (originalTime) document.getElementById('time').value = originalTime;
+      }
+    }
+
+    // Update time slot options based on selected date and current time
+    function updateTimeSlots() {
+      const dateInput = document.getElementById('date').value;
+      const timeSelect = document.getElementById('time');
+      const timeError = document.getElementById('time-error');
+      const dateError = document.getElementById('date-error');
+      timeError.style.display = 'none';
+      timeSelect.innerHTML = '<option value="" disabled selected>Select a time</option>';
+
+      const allTimes = ['8:00 AM', '10:00 AM', '12:00 PM', '2:00 PM', '4:00 PM', '6:00 PM'];
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const selectedDate = new Date(dateInput);
+      const currentTime = new Date();
+
+      let availableTimes = allTimes;
+      if (selectedDate.getTime() === today.getTime()) {
+        // Filter out past times for today
+        availableTimes = allTimes.filter(time => {
+          const [hour, minutePeriod] = time.split(':');
+          const [minute, period] = minutePeriod.split(' ');
+          let hour24 = parseInt(hour);
+          if (period === 'PM' && hour24 !== 12) hour24 += 12;
+          if (period === 'AM' && hour24 === 12) hour24 = 0;
+          const slotTime = new Date(selectedDate);
+          slotTime.setHours(hour24, parseInt(minute), 0, 0);
+          return slotTime >= currentTime;
+        });
+      }
+
+      availableTimes.forEach(time => {
+        const option = document.createElement('option');
+        option.value = time;
+        option.textContent = time;
+        timeSelect.appendChild(option);
+      });
+
+      // Check if selected time is booked
+      timeSelect.addEventListener('change', checkSlotAvailability);
+    }
+
+    // Check if the selected date has reached the 6-appointment limit
+    function checkDateAvailability() {
+      const date = document.getElementById('date').value;
+      const dateError = document.getElementById('date-error');
+      const urlParams = new URLSearchParams(window.location.search);
+      const isReschedule = urlParams.get('reschedule') === 'true';
+      const originalDate = urlParams.get('originalDate');
+      const originalTime = urlParams.get('originalTime');
+
+      if (!date) return;
+
+      const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+      let dateBookings = bookings.filter(booking => booking.date === date);
+
+      // If rescheduling, exclude the original booking from the count
+      if (isReschedule && originalDate === date && originalTime) {
+        dateBookings = dateBookings.filter(booking => booking.time !== originalTime);
+      }
+
+      if (dateBookings.length >= 6) {
+        dateError.textContent = 'This date has reached the maximum of 6 appointments. Please choose another date.';
+        dateError.style.display = 'block';
+      } else {
+        dateError.textContent = 'Please select a valid date (today or later).';
+        dateError.style.display = 'none';
+      }
+
+      updateTimeSlots();
+    }
+
+    // Check if the selected date and time slot is booked
+    function checkSlotAvailability() {
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
+      const timeError = document.getElementById('time-error');
+      const urlParams = new URLSearchParams(window.location.search);
+      const isReschedule = urlParams.get('reschedule') === 'true';
+      const originalDate = urlParams.get('originalDate');
+      const originalTime = urlParams.get('originalTime');
+
+      if (!date || !time) return;
+
+      const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+      const isBooked = bookings.some(booking => 
+        booking.date === date && 
+        booking.time === time && 
+        !(isReschedule && booking.date === originalDate && booking.time === originalTime)
+      );
+
+      if (isBooked) {
+        timeError.textContent = 'This slot is already booked. Please choose another time.';
+        timeError.style.display = 'block';
+      } else {
+        timeError.style.display = 'none';
+      }
+    }
+
+    // Validate form inputs
+    function validateForm(name, contact, date, time) {
+      const nameError = document.getElementById('name-error');
+      const contactError = document.getElementById('contact-error');
+      const dateError = document.getElementById('date-error');
+      const timeError = document.getElementById('time-error');
+      let isValid = true;
+
+      nameError.style.display = 'none';
+      contactError.style.display = 'none';
+      dateError.style.display = 'none';
+      timeError.style.display = 'none';
+
+      if (!/^[A-Za-z\s]+$/.test(name.trim())) {
+        nameError.style.display = 'block';
+        isValid = false;
+      }
+
+      if (!/^\d{10}$/.test(contact.trim())) {
+        contactError.style.display = 'block';
+        isValid = false;
+      }
+
+      const selectedDate = new Date(date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (!date || selectedDate < today) {
+        dateError.textContent = 'Please select a valid date (today or later).';
+        dateError.style.display = 'block';
+        isValid = false;
+      }
+
+      if (!time) {
+        timeError.textContent = 'Please select a valid time.';
+        timeError.style.display = 'block';
+        isValid = false;
+      }
+
+      // Check for booked slot
+      const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+      const urlParams = new URLSearchParams(window.location.search);
+      const isReschedule = urlParams.get('reschedule') === 'true';
+      const originalDate = urlParams.get('originalDate');
+      const originalTime = urlParams.get('originalTime');
+
+      const isBooked = bookings.some(booking => 
+        booking.date === date && 
+        booking.time === time && 
+        !(isReschedule && booking.date === originalDate && booking.time === originalTime)
+      );
+      if (isBooked) {
+        timeError.textContent = 'This slot is already booked. Please choose another time.';
+        timeError.style.display = 'block';
+        isValid = false;
+      }
+
+      // Check for 6-appointment limit
+      let dateBookings = bookings.filter(booking => booking.date === date);
+      if (isReschedule && originalDate === date && originalTime) {
+        dateBookings = dateBookings.filter(booking => booking.time !== originalTime);
+      }
+      if (dateBookings.length >= 6) {
+        dateError.textContent = 'This date has reached the maximum of 6 appointments. Please choose another date.';
+        dateError.style.display = 'block';
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    // Form submission handler
+    document.getElementById('booking-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const contact = document.getElementById('contact').value;
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
+
+      if (validateForm(name, contact, date, time)) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const doctor = urlParams.get('doctor') || 'Unknown Doctor';
+        const patientEmail = urlParams.get('patientEmail') || 'unknown@example.com';
+        const isReschedule = urlParams.get('reschedule') === 'true';
+        const originalDate = urlParams.get('originalDate');
+        const originalTime = urlParams.get('originalTime');
+
+        const booking = {
+          name: sanitizeInput(name),
+          contact: sanitizeInput(contact),
+          date: sanitizeInput(date),
+          time: sanitizeInput(time),
+          doctor: sanitizeInput(doctor),
+          patientEmail: sanitizeInput(patientEmail),
+          specialty: sanitizeInput(urlParams.get('specialty') || 'General Medicine'),
+          qualification: sanitizeInput(urlParams.get('qualification') || 'MBBS'),
+          location: sanitizeInput(urlParams.get('location') || 'Hyderabad')
+        };
+
+        let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+        let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+        let patientNotifications = JSON.parse(localStorage.getItem('patientNotifications') || '[]');
+
+        if (isReschedule && originalDate && originalTime && patientEmail) {
+          // Remove original booking
+          bookings = bookings.filter(booking => 
+            !(booking.patientEmail === patientEmail && 
+              booking.date === originalDate && 
+              booking.time === originalTime)
+          );
+          // Add notifications
+          notifications.push({
+            doctor: booking.doctor,
+            message: `${booking.name} rescheduled appointment from ${originalTime} to ${booking.time} on ${booking.date}`,
+            timestamp: new Date().toISOString()
+          });
+          patientNotifications.push({
+            patientEmail: booking.patientEmail,
+            message: `Your appointment with ${booking.doctor} has been rescheduled to ${booking.date} at ${booking.time}.`,
+            timestamp: new Date().toISOString()
+          });
+        } else {
+          // Add notifications
+          notifications.push({
+            doctor: booking.doctor,
+            message: `${booking.name} booked an appointment on ${booking.date} at ${booking.time}`,
+            timestamp: new Date().toISOString()
+          });
+          patientNotifications.push({
+            patientEmail: booking.patientEmail,
+            message: `Your appointment with ${booking.doctor} on ${booking.date} at ${booking.time} is confirmed.`,
+            timestamp: new Date().toISOString()
+          });
+        }
+
+        // Add new booking
+        bookings.push(booking);
+        localStorage.setItem('bookings', JSON.stringify(bookings));
+        localStorage.setItem('notifications', JSON.stringify(notifications));
+        localStorage.setItem('patientNotifications', JSON.stringify(patientNotifications));
+
+        // Redirect to afterpayment.html
+        const params = new URLSearchParams({
+          name: booking.name,
+          contact: booking.contact,
+          date: booking.date,
+          time: booking.time,
+          doctor: booking.doctor,
+          specialty: booking.specialty,
+          qualification: booking.qualification,
+          location: booking.location,
+          patientEmail: booking.patientEmail
+        });
+        window.location.href = `afterpayment.html?${params.toString()}`;
+      }
+    });
+
+    // Initialize page
+    window.onload = () => {
+      getQueryParams();
+      updateTimeSlots();
+      document.getElementById('date').addEventListener('change', checkDateAvailability);
+      document.getElementById('time').addEventListener('change', checkSlotAvailability);
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6b7280, #1e40af);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+      overflow-x: hidden;
+    }
+
+    h1, h2 {
+      font-weight: 700;
+      text-align: center;
+      color: #e5e7eb;
+      text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      padding: 10px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2.8em;
+      margin-bottom: 40px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h2 {
+      font-size: 2em;
+      margin: 30px 0 20px;
+    }
+
+    .login-container {
+      background: rgba(243, 244, 246, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      max-width: 700px;
+      width: 100%;
+      margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: slideUp 0.6s ease-out;
+    }
+
+    .doctor-profile {
+      background: rgba(219, 234, 254, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      max-width: 700px;
+      width: 100%;
+      margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: slideUp 0.6s ease-out;
+    }
+
+    .bookings-container {
+      background: rgba(220, 252, 231, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      max-width: 700px;
+      width: 100%;
+      margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: slideUp 0.6s ease-out;
+    }
+
+    .notifications-container {
+      background: rgba(254, 226, 226, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      max-width: 700px;
+      width: 100%;
+      margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: slideUp 0.6s ease-out;
+    }
+
+    .login-container:hover, .doctor-profile:hover, .bookings-container:hover, .notifications-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      border: 2px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 1.1em;
+      background: rgba(255, 255, 255, 0.8);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      color: #111827;
+    }
+
+    .login-container input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+      outline: none;
+    }
+
+    .login-container input::placeholder {
+      color: #6b7280;
+    }
+
+    .login-btn, .logout-btn, .clear-btn, .sort-btn {
+      background: linear-gradient(135deg, #3b82f6, #1e40af);
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .sort-btn {
+      background: linear-gradient(135deg, #6b7280, #4b5563);
+      padding: 10px 20px;
+      font-size: 0.9em;
+    }
+
+    .login-btn:hover, .logout-btn:hover, .clear-btn:hover, .sort-btn:hover {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .sort-btn:hover {
+      background: linear-gradient(135deg, #4b5563, #6b7280);
+    }
+
+    .sort-btn.active {
+      background: linear-gradient(135deg, #3b82f6, #1e40af);
+    }
+
+    .doctor-profile p, .bookings-container p, .notifications-container p {
+      font-size: 1.1em;
+      color: #111827;
+      margin: 12px 0;
+      line-height: 1.6;
+    }
+
+    .bookings-container p, .notifications-container p {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      transition: background 0.3s ease;
+    }
+
+    .bookings-container p:hover, .notifications-container p:hover {
+      background: rgba(229, 231, 235, 0.9);
+    }
+
+    .error, .success {
+      font-size: 1em;
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .error {
+      color: #dc2626;
+      background: rgba(254, 242, 242, 0.9);
+      border: 1px solid #fecaca;
+    }
+
+    .success {
+      color: #16a34a;
+      background: rgba(240, 253, 244, 0.9);
+      border: 1px solid #bbf7d0;
+    }
+
+    .sort-options {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 2.2em;
+      }
+
+      h2 {
+        font-size: 1.6em;
+      }
+
+      .login-container, .doctor-profile, .bookings-container, .notifications-container {
+        padding: 20px;
+        border-radius: 15px;
+      }
+
+      .login-btn, .logout-btn, .clear-btn {
+        padding: 12px 20px;
+        font-size: 1em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .sort-options {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .sort-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container" id="login-container">
+    <h1>Doctor Portal</h1>
+    <input type="text" id="username" placeholder="Username" aria-label="Username" required>
+    <input type="password" id="password" placeholder="Password" aria-label="Password" required>
+    <button class="login-btn" onclick="login()" aria-label="Log in">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+      </svg>
+      Log In
+    </button>
+    <div id="login-error" class="error">Invalid username or password</div>
+    <div id="login-success" class="success">Login successful!</div>
+  </div>
+
+  <div class="doctor-profile" id="doctor-profile" style="display: none;">
+    <h2>Doctor Profile</h2>
+    <p><strong>Name:</strong> <span id="profile-name"></span></p>
+    <p><strong>Specialty:</strong> <span id="profile-specialty"></span></p>
+    <p><strong>Qualification:</strong> <span id="profile-qualification"></span></p>
+    <p><strong>Location:</strong> <span id="profile-location"></span></p>
+    <button class="logout-btn" onclick="logout()" aria-label="Log out">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+        <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+      </svg>
+      Log Out
+    </button>
+  </div>
+
+  <div class="bookings-container" id="bookings-container" style="display: none;">
+    <h2>Your Bookings</h2>
+    <div class="sort-options">
+      <button class="sort-btn" onclick="sortBookings('date')" aria-label="Sort bookings by date">Sort by Date</button>
+      <button class="sort-btn" onclick="sortBookings('name')" aria-label="Sort bookings by patient name">Sort by Name</button>
+    </div>
+    <div id="bookings-list"></div>
+  </div>
+
+  <div class="notifications-container" id="notifications-container" style="display: none;">
+    <h2>Notifications</h2>
+    <button class="clear-btn" onclick="clearNotifications()" aria-label="Clear all notifications">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854z"/>
+      </svg>
+      Clear Notifications
+    </button>
+    <div id="notifications-list"></div>
+  </div>
+
+  <script>
+    // Simple sanitization (replace with DOMPurify in production)
+    function sanitizeInput(input) {
+      const div = document.createElement('div');
+      div.textContent = input;
+      return div.innerHTML;
+    }
+
+    // Hardcoded doctor credentials (replace with backend authentication)
+    const doctors = [
+    { username: 'arjun', password: 'pass123', name: 'Dr. Arjun Reddy', specialty: 'General Physician', qualification: 'MBBS, MD', location: 'Hyderabad' },
+    { username: 'kavitha', password: 'pass123', name: 'Dr. Kavitha Menon', specialty: 'Gynecologist', qualification: 'MBBS, MS (OBG)', location: 'Hyderabad' },
+    { username: 'rajesh', password: 'pass123', name: 'Dr. Rajesh Gupta', specialty: 'Cardiologist', qualification: 'MBBS, DM - Cardiology', location: 'Hyderabad' },
+    { username: 'sneha', password: 'pass123', name: 'Dr. Sneha Rao', specialty: 'Physiotherapist', qualification: 'BPT, MPT', location: 'Hyderabad' },
+    { username: 'faizan', password: 'pass123', name: 'Dr. Faizan Khan', specialty: 'Radiologist', qualification: 'MBBS, MD - Radiology', location: 'Hyderabad' },
+    { username: 'asha', password: 'pass123', name: 'Dr. Asha Thomas', specialty: 'Palliative Care', qualification: 'MBBS, Fellowship in Palliative Medicine', location: 'Hyderabad' },
+    { username: 'sandeep', password: 'pass123', name: 'Dr. Sandeep Rathi', specialty: 'Cardiologist', qualification: 'MBBS, DM', location: 'Warangal' },
+    { username: 'pranitha', password: 'pass123', name: 'Dr. Pranitha Iyer', specialty: 'General Physician', qualification: 'MBBS, MD', location: 'Warangal' },
+    { username: 'vamshi', password: 'pass123', name: 'Dr. Vamshi Krishna', specialty: 'Radiologist', qualification: 'MBBS, MD', location: 'Warangal' },
+    { username: 'anitha', password: 'pass123', name: 'Dr. Anitha Devi', specialty: 'Gynecologist', qualification: 'MBBS, MS', location: 'Warangal' },
+    { username: 'naveen', password: 'pass123', name: 'Dr. Naveen K', specialty: 'Palliative Care', qualification: 'MBBS, Fellowship', location: 'Warangal' },
+    { username: 'tara', password: 'pass123', name: 'Dr. Tara Bhargavi', specialty: 'Physiotherapist', qualification: 'BPT', location: 'Warangal' },
+    { username: 'latha', password: 'pass123', name: 'Dr. Latha Ramesh', specialty: 'General Physician', qualification: 'MBBS, MD', location: 'Nizamabad' },
+    { username: 'uday', password: 'pass123', name: 'Dr. Uday Shekar', specialty: 'Cardiologist', qualification: 'MBBS, DM', location: 'Nizamabad' },
+    { username: 'sindhura', password: 'pass123', name: 'Dr. Sindhura M', specialty: 'Gynecologist', qualification: 'MBBS, MS', location: 'Nizamabad' },
+    { username: 'mahesh', password: 'pass123', name: 'Dr. Mahesh Kumar', specialty: 'Radiologist', qualification: 'MBBS, MD', location: 'Nizamabad' },
+    { username: 'triveni', password: 'pass123', name: 'Dr. Triveni Rao', specialty: 'Physiotherapist', qualification: 'BPT, MPT', location: 'Nizamabad' },
+    { username: 'rahul', password: 'pass123', name: 'Dr. Rahul Das', specialty: 'General Physician', qualification: 'MBBS, MD', location: 'Karimnagar' },
+    { username: 'deepika', password: 'pass123', name: 'Dr. Deepika Nair', specialty: 'Gynecologist', qualification: 'MBBS, MS', location: 'Karimnagar' },
+    { username: 'sai', password: 'pass123', name: 'Dr. Sai Kishore', specialty: 'Radiologist', qualification: 'MBBS, MD', location: 'Karimnagar' },
+    { username: 'lavanya', password: 'pass123', name: 'Dr. Lavanya K', specialty: 'Physiotherapist', qualification: 'BPT, MPT', location: 'Karimnagar' },
+    { username: 'harsha', password: 'pass123', name: 'Dr. Harsha Vardhan', specialty: 'Cardiologist', qualification: 'MBBS, DM', location: 'Karimnagar' },
+    { username: 'ashok', password: 'pass123', name: 'Dr. Ashok Reddy', specialty: 'General Physician', qualification: 'MBBS, MD', location: 'Khammam' },
+    { username: 'megha', password: 'pass123', name: 'Dr. Megha Sharma', specialty: 'Gynecologist', qualification: 'MBBS, MS', location: 'Khammam' },
+    { username: 'karthik', password: 'pass123', name: 'Dr. Karthik V', specialty: 'Radiologist', qualification: 'MBBS, MD', location: 'Khammam' },
+    { username: 'haritha', password: 'pass123', name: 'Dr. Haritha Rao', specialty: 'Palliative Care', qualification: 'MBBS, Fellowship', location: 'Khammam' },
+    { username: 'shalini', password: 'pass123', name: 'Dr. Shalini Iyer', specialty: 'Physiotherapist', qualification: 'BPT, MPT', location: 'Khammam' },
+    { username: 'shashank', password: 'pass123', name: 'Dr. Shashank Rao', specialty: 'Cardiologist', qualification: 'MBBS, DM', location: 'Adilabad' },
+    { username: 'kiran', password: 'pass123', name: 'Dr. Kiran Jyothi', specialty: 'Gynecologist', qualification: 'MBBS, MS', location: 'Adilabad' },
+    { username: 'sameer', password: 'pass123', name: 'Dr. Sameer Khan', specialty: 'General Physician', qualification: 'MBBS, MD', location: 'Adilabad' },
+    { username: 'supriya', password: 'pass123', name: 'Dr. Supriya Reddy', specialty: 'Radiologist', qualification: 'MBBS, MD', location: 'Adilabad' },
+    { username: 'vikas', password: 'pass123', name: 'Dr. Vikas Sharma', specialty: 'Physiotherapist', qualification: 'BPT', location: 'Adilabad' },
+    { username: 'charan', password: 'pass123', name: 'Dr. Charan Teja', specialty: 'General Physician', qualification: 'MBBS, MD', location: 'Mahabubnagar' },
+    { username: 'pooja', password: 'pass123', name: 'Dr. Pooja Mehta', specialty: 'Gynecologist', qualification: 'MBBS, MS', location: 'Mahabubnagar' },
+    { username: 'arvind', password: 'pass123', name: 'Dr. Arvind R', specialty: 'Radiologist', qualification: 'MBBS, MD', location: 'Mahabubnagar' },
+    { username: 'yamini', password: 'pass123', name: 'Dr. Yamini Rao', specialty: 'Cardiologist', qualification: 'MBBS, DM', location: 'Mahabubnagar' },
+    { username: 'srinivas', password: 'pass123', name: 'Dr. Srinivas Rao', specialty: 'Palliative Care', qualification: 'MBBS', location: 'Mahabubnagar' },
+    { username: 'neha', password: 'pass123', name: 'Dr. Neha Agarwal', specialty: 'Gynecologist', qualification: 'MBBS, MS', location: 'Sangareddy' },
+    { username: 'ramesh', password: 'pass123', name: 'Dr. Ramesh D', specialty: 'General Physician', qualification: 'MBBS, MD', location: 'Sangareddy' },
+    { username: 'kiranr', password: 'pass123', name: 'Dr. Kiran Reddy', specialty: 'Cardiologist', qualification: 'MBBS, DM', location: 'Sangareddy' },
+    { username: 'vinutha', password: 'pass123', name: 'Dr. Vinutha', specialty: 'Radiologist', qualification: 'MBBS, MD', location: 'Sangareddy' },
+    { username: 'harika', password: 'pass123', name: 'Dr. Harika T', specialty: 'Physiotherapist', qualification: 'BPT', location: 'Sangareddy' },
+    { username: 'manoj', password: 'pass123', name: 'Dr. Manoj Kumar', specialty: 'Cardiologist', qualification: 'MBBS, DM', location: 'Nalgonda' },
+    { username: 'swathi', password: 'pass123', name: 'Dr. Swathi G', specialty: 'Gynecologist', qualification: 'MBBS, MS', location: 'Nalgonda' },
+    { username: 'chaitanya', password: 'pass123', name: 'Dr. Chaitanya Rao', specialty: 'General Physician', qualification: 'MBBS, MD', location: 'Nalgonda' },
+    { username: 'bhanu', password: 'pass123', name: 'Dr. Bhanu Reddy', specialty: 'Radiologist', qualification: 'MBBS, MD', location: 'Nalgonda' },
+    { username: 'leela', password: 'pass123', name: 'Dr. Leela Thomas', specialty: 'Palliative Care', qualification: 'MBBS', location: 'Nalgonda' },
+    { username: 'mahendra', password: 'pass123', name: 'Dr. Mahendra Rao', specialty: 'Cardiologist', qualification: 'MBBS, DM', location: 'Ranga Reddy' },
+    { username: 'divya', password: 'pass123', name: 'Dr. Divya Shah', specialty: 'Gynecologist', qualification: 'MBBS, MS', location: 'Ranga Reddy' },
+    { username: 'rohit', password: 'pass123', name: 'Dr. Rohit Menon', specialty: 'General Physician', qualification: 'MBBS, MD', location: 'Ranga Reddy' },
+    { username: 'snehalatha', password: 'pass123', name: 'Dr. Snehalatha', specialty: 'Radiologist', qualification: 'MBBS, MD', location: 'Ranga Reddy' },
+    { username: 'kruthi', password: 'pass123', name: 'Dr. Kruthi K', specialty: 'Physiotherapist', qualification: 'BPT, MPT', location: 'Ranga Reddy' }
+
+   
+    ];
+
+    let currentSort = 'date'; // Default sort for bookings
+
+    function login() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const error = document.getElementById('login-error');
+      const success = document.getElementById('login-success');
+
+      error.style.display = 'none';
+      success.style.display = 'none';
+
+      const doctor = doctors.find(d => d.username === username && d.password === password);
+
+      if (doctor) {
+        localStorage.setItem('loggedInDoctor', JSON.stringify(doctor));
+        success.style.display = 'block';
+        setTimeout(() => {
+          showDoctorPortal(doctor);
+          success.style.display = 'none';
+        }, 1000);
+      } else {
+        error.style.display = 'block';
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('loggedInDoctor');
+      document.getElementById('login-container').style.display = 'block';
+      document.getElementById('doctor-profile').style.display = 'none';
+      document.getElementById('bookings-container').style.display = 'none';
+      document.getElementById('notifications-container').style.display = 'none';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+
+    function showDoctorPortal(doctor) {
+      document.getElementById('login-container').style.display = 'none';
+      document.getElementById('doctor-profile').style.display = 'block';
+      document.getElementById('bookings-container').style.display = 'block';
+      document.getElementById('notifications-container').style.display = 'block';
+
+      document.getElementById('profile-name').textContent = sanitizeInput(doctor.name);
+      document.getElementById('profile-specialty').textContent = sanitizeInput(doctor.specialty);
+      document.getElementById('profile-qualification').textContent = sanitizeInput(doctor.qualification);
+      document.getElementById('profile-location').textContent = sanitizeInput(doctor.location);
+
+      displayBookings(doctor.name);
+      displayNotifications(doctor.name);
+    }
+
+    function displayBookings(doctorName) {
+      const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+      let doctorBookings = bookings.filter(b => b.doctor === doctorName);
+
+      // Sort bookings
+      if (currentSort === 'date') {
+        doctorBookings.sort((a, b) => new Date(b.date) - new Date(a.date));
+      } else if (currentSort === 'name') {
+        doctorBookings.sort((a, b) => a.name.localeCompare(b.name));
+      }
+
+      const bookingsList = document.getElementById('bookings-list');
+      bookingsList.innerHTML = doctorBookings.length > 0
+        ? doctorBookings.map(b => `
+            <p>
+              <strong>Patient:</strong> ${sanitizeInput(b.name)}<br>
+              <strong>Contact:</strong> ${sanitizeInput(b.contact)}<br>
+              <strong>Date:</strong> ${sanitizeInput(b.date)}<br>
+              <strong>Time:</strong> ${sanitizeInput(b.time)}
+            </p>
+          `).join('')
+        : '<p>No bookings found.</p>';
+
+      // Update sort button styles
+      document.querySelectorAll('.sort-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.onclick.toString().includes(currentSort));
+      });
+    }
+
+    function sortBookings(sortBy) {
+      currentSort = sortBy;
+      const loggedInDoctor = JSON.parse(localStorage.getItem('loggedInDoctor') || '{}');
+      if (loggedInDoctor && loggedInDoctor.name) {
+        displayBookings(loggedInDoctor.name);
+      }
+    }
+
+    function displayNotifications(doctorName) {
+      const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+      const doctorNotifications = notifications
+        .filter(n => n.doctor === doctorName)
+        .sort((a, b) => new Date(b.timestamp || new Date()) - new Date(a.timestamp || new Date()));
+
+      const notificationsList = document.getElementById('notifications-list');
+      notificationsList.innerHTML = doctorNotifications.length > 0
+        ? doctorNotifications.map(n => `
+            <p>
+              ${sanitizeInput(n.message || `New booking by ${n.name} for ${n.date} at ${n.time}`)}<br>
+              <small>${new Date(n.timestamp || new Date()).toLocaleString()}</small>
+            </p>
+          `).join('')
+        : '<p>No new notifications.</p>';
+    }
+
+    function clearNotifications() {
+      const loggedInDoctor = JSON.parse(localStorage.getItem('loggedInDoctor') || '{}');
+      if (loggedInDoctor && loggedInDoctor.name) {
+        let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+        notifications = notifications.filter(n => n.doctor !== loggedInDoctor.name);
+        localStorage.setItem('notifications', JSON.stringify(notifications));
+        displayNotifications(loggedInDoctor.name);
+      }
+    }
+
+    // Check if already logged in
+    window.onload = () => {
+      const loggedInDoctor = JSON.parse(localStorage.getItem('loggedInDoctor') || '{}');
+      if (loggedInDoctor && loggedInDoctor.username) {
+        showDoctorPortal(loggedInDoctor);
+      }
+    };
+  </script>
+</body>
+</html>
